@@ -1,6 +1,3 @@
-using Pkg
-Pkg.activate()
-
 # every include
 using LinearAlgebra
 using StaticArrays
@@ -9,8 +6,7 @@ using Revise
 using Colors
 using Makie
 
-includet("../RANSAC.jl")
-using .RANSAC
+using RANSAC
 
 ## Test1
 # inputs

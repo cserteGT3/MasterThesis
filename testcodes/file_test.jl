@@ -9,8 +9,7 @@ using Revise
 using Colors
 using Makie
 
-includet("../RANSAC.jl")
-using .RANSAC
+using RANSAC
 
 using DelimitedFiles
 

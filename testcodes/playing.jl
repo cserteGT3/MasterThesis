@@ -1,14 +1,10 @@
-using Pkg
-Pkg.activate()
-
 using Revise
 using LinearAlgebra
 using StaticArrays
 using Makie
 AbstractPlotting.__init__()
 
-includet("../RANSAC.jl")
-using .RANSAC
+using RANSAC
 
 ## Easy examples
 

@@ -1,6 +1,3 @@
-using Pkg
-Pkg.activate()
-
 # every include
 using LinearAlgebra
 using StaticArrays
@@ -11,8 +8,7 @@ using Makie
 using RegionTrees: adaptivesampling!, Cell, allleaves
 import GeometryTypes
 
-includet("../RANSAC.jl")
-using .RANSAC
+using RANSAC
 
 ## Construct an example pointcloud
 

@@ -4,8 +4,7 @@ using LinearAlgebra
 using StaticArrays: SVector
 using Makie
 
-include("../RANSAC.jl")
-using .RANSAC
+using RANSAC
 
 struct Circ{T<:Real}
     R::T
