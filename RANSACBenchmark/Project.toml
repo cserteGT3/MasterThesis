@@ -1,0 +1,9 @@
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
+PkgBenchmark = "32113eaa-f34f-5b0d-bd6c-c81e245fc73d"
+PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
+RANSAC = "d6bc97e0-a563-11e9-1861-c573f65f3bc3"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
