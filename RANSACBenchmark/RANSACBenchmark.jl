@@ -11,7 +11,7 @@ using CSV
 using PropertyFiles
 using PrettyTables
 
-using RANSAC: nosource_debuglogger, nosource_infologger
+#using RANSAC: nosource_debuglogger, nosource_infologger
 
 export runbenchmark, loadbenchmarks, savebenchmark
 export printresult
@@ -35,8 +35,8 @@ const table_align = [:l, :l, nums, nums, nums, nums, nums, nums, :l]
 Run benchmark.
 """
 function runbenchmark(show = true; showdebug = false)
-    glb = global_logger()
-    showdebug ? global_logger(nosource_debuglogger()) : global_logger(nosource_infologger())
+    #glb = global_logger()
+    #showdebug ? global_logger(nosource_debuglogger()) : global_logger(nosource_infologger())
 
 	bmi_ = benchmarkpkg("RANSAC")
 
@@ -44,7 +44,7 @@ function runbenchmark(show = true; showdebug = false)
 	benched = makedf(bmi)
 
     show && display(bmi)
-    global_logger(glb)
+    #global_logger(glb)
     benched, bmi
 end
 
