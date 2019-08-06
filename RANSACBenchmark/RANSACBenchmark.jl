@@ -15,11 +15,10 @@ using JuDoc
 #using RANSAC: nosource_debuglogger, nosource_infologger
 
 export runbenchmark, loadbenchmarks, savebenchmark
-export printresult
 export printresult, saveresult
 export info
 export printload
-export resetcommitsha
+export resetcommitsha, setpropfile, lastbenchmarkedcommit!
 
 export callmeCI
 
@@ -44,14 +43,14 @@ const BENCHMARK_VERSION = v"1.1.0"
 Run benchmark.
 """
 function runbenchmark(show = true; showdebug = false)
-	@warn "keyword showdebug doesn't have effect currently."
+	showdebug && @warn "keyword showdebug doesn't have effect currently."
     #glb = global_logger()
     #showdebug ? global_logger(nosource_debuglogger()) : global_logger(nosource_infologger())
 
 	bmresult = benchmarkpkg("RANSAC")
 
     bmtrial = bmresult.benchmarkgroup.data["RANSAC"]["smallideal"]
-	benched = makedf(bmi)
+	benched = makedf(bmtrial)
 
     show && display(bmtrial)
     #global_logger(glb)
@@ -78,7 +77,7 @@ function makedf(bmresult)
 	df.maximumtime = [maxt]
 	df.allocated = [allocs(bmresult)]
 	df.memory = [memory(bmresult)/1024]
-	df.bversion = BENCHMARK_VERSION
+	df.bversion = [BENCHMARK_VERSION]
 	df.system = [pc]
 	df.jversion = [Base.VERSION]
 	return df
@@ -101,7 +100,7 @@ function makedf(bmresult, commitsha, commitdate)
 	df.maximumtime = [maxt]
 	df.allocated = [allocs(bmresult)]
 	df.memory = [memory(bmresult)/1024]
-	df.bversion = BENCHMARK_VERSION
+	df.bversion = [BENCHMARK_VERSION]
 	df.system = [pc]
 	df.jversion = [Base.VERSION]
 	return df
@@ -263,8 +262,19 @@ function getdirfromprop(prop, key, question)
 end
 
 function lastbenchmarkedcommit(prop, key)
-	#getprop!(prop, key, "fe1fefceed88508b08dc26fc4835e95ab367e12a")
-	getprop!(prop, key, "dd43556f264480208c6a007cf19b7052e67b7ac2")
+	getprop!(prop, key, "fe1fefceed88508b08dc26fc4835e95ab367e12a")
+	#getprop!(prop, key, "dd43556f264480208c6a007cf19b7052e67b7ac2")
+end
+
+function lastbenchmarkedcommit!(prop, key, commitsha)
+	setprop(prop, key, commitsha)
+	store(prop, RPropsfile)
+end
+
+function lastbenchmarkedcommit!(commitsha::AbstractString)
+	prop = loadp()
+	setprop(prop, commitkey, commitsha)
+	store(prop, RPropsfile)
 end
 
 """
@@ -280,17 +290,6 @@ function resetcommitsha()
 	p = loadp()
 	resetcommitsha(p, commitkey)
 	store(p, RPropsfile)
-end
-
-function lastbenchmarkedcommit!(prop, key, commitsha)
-	setprop(prop, key, commitsha)
-	store(prop, RPropsfile)
-end
-
-function lastbenchmarkedcommit!(commitsha::AbstractString)
-	prop = loadp()
-	setprop(prop, commitkey, commitsha)
-	store(prop, RPropsfile)
 end
 
 function savefull_benchmark(df, bmresult, gitfolder)
