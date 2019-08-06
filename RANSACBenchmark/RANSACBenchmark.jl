@@ -19,13 +19,20 @@ export printresult
 export printresult, saveresult
 export info
 export printload
+export resetcommitsha
 
 export callmeCI
 
-const table_header = ["benchmark date" "commit date" "commit sha" "minimum time" "median time" "mean time" "maximum time" "allocs" "memory" "system" "julia version"; "" "" "" "[s]" "[s]" "[s]" "[s]" "" "[MiB]" "" ""]
-const md_table_header = ["benchmark date" "commit date" "commit sha" "minimum time [s]" "median time [s]" "mean time [s]" "maximum time [s]" "allocs" "memory [MiB]" "system" "julia version"]
+const table_header = ["benchmark date" "commit date" "commit sha" "minimum time" "median time" "mean time" "maximum time" "allocs" "memory" "benchmark v." "system" "julia v.";
+ 						"" "" "" "[s]" "[s]" "[s]" "[s]" "" "[MiB]" "" "" ""]
+const md_table_header = ["benchmark date" "commit date" "commit sha" "minimum time [s]" "median time [s]" "mean time [s]" "maximum time [s]" "allocs" "memory [MiB]" "benchmark v." "system" "julia v."]
 const nums = :r
-const table_align = [:l, :l, :l, nums, nums, nums, nums, nums, nums, :l, :l]
+const table_align = [:l, :l, :l, nums, nums, nums, nums, nums, nums, :l, :l, :l]
+
+const RPropsfile = "ransacbenchmarkprops.jlprop"
+const commitkey = "lasbenchmarkedcommit"
+
+const BENCHMARK_VERSION = v"1.1.0"
 
 #######################
 # manual benchmarking #
@@ -37,17 +44,18 @@ const table_align = [:l, :l, :l, nums, nums, nums, nums, nums, nums, :l, :l]
 Run benchmark.
 """
 function runbenchmark(show = true; showdebug = false)
+	@warn "keyword showdebug doesn't have effect currently."
     #glb = global_logger()
     #showdebug ? global_logger(nosource_debuglogger()) : global_logger(nosource_infologger())
 
-	bmi_ = benchmarkpkg("RANSAC")
+	bmresult = benchmarkpkg("RANSAC")
 
-    bmi = bmi_.benchmarkgroup.data["RANSAC"]["smallideal"]
+    bmtrial = bmresult.benchmarkgroup.data["RANSAC"]["smallideal"]
 	benched = makedf(bmi)
 
-    show && display(bmi)
+    show && display(bmtrial)
     #global_logger(glb)
-    benched, bmi
+    bmresult, bmtrial, benched
 end
 
 function makedf(bmresult)
@@ -70,6 +78,7 @@ function makedf(bmresult)
 	df.maximumtime = [maxt]
 	df.allocated = [allocs(bmresult)]
 	df.memory = [memory(bmresult)/1024]
+	df.bversion = BENCHMARK_VERSION
 	df.system = [pc]
 	df.jversion = [Base.VERSION]
 	return df
@@ -92,11 +101,11 @@ function makedf(bmresult, commitsha, commitdate)
 	df.maximumtime = [maxt]
 	df.allocated = [allocs(bmresult)]
 	df.memory = [memory(bmresult)/1024]
+	df.bversion = BENCHMARK_VERSION
 	df.system = [pc]
 	df.jversion = [Base.VERSION]
 	return df
 end
-
 
 function getpc()
     if Sys.iswindows()
@@ -134,25 +143,25 @@ function nicify(df)
 end
 
 function tablify(df)
-    [df.benchmarkdate df.commitdate df.commitsha df.minimumtime df.mediantime df.meantime df.maximumtime df.allocated df.memory df.system df.jversion]
+    [df.benchmarkdate df.commitdate df.commitsha df.minimumtime df.mediantime df.meantime df.maximumtime df.allocated df.memory df.bversion df.system df.jversion]
 end
 
 function printresult(tb)
     hmnice = tablify(nicify(tb))
     tf = PrettyTableFormat(unicode)
-    pretty_table(hmnice, table_header, tf, alignment = table_align, formatter=ft_round(3, [3,4,5,6,8]))
+    pretty_table(hmnice, table_header, tf, alignment = table_align, formatter=ft_round(3, [4,5,6,7,9]))
 end
 
 function saveresult(tb, fname = "benchmark_results.md")
     hmnice = tablify(nicify(tb))
     tf = PrettyTableFormat(markdown)
     open(fname, "w") do io
-        pretty_table(io, hmnice, md_table_header, tf, alignment = table_align, formatter=ft_round(3, [3,4,5,6,8]))
+        pretty_table(io, hmnice, md_table_header, tf, alignment = table_align, formatter=ft_round(3, [4,5,6,7,9]))
     end
     @info "Pretty markdown saved."
 end
 
-function savebenchmark(bm, fname = "benchmark_results.csv")
+function savebenchmark(bm, fname::AbstractString)
     if !isfile(fname)
         CSV.write(fname, bm )
     else
@@ -161,29 +170,66 @@ function savebenchmark(bm, fname = "benchmark_results.csv")
     @info "CSV file saved."
 end
 
-function loadbenchmarks(fname = "benchmark_results.csv")
+function savebenchmark(bmarkresult, benchedtable)
+	current_dir = pwd()
+
+	RBProp = loadp()
+	resultdir = getdirfromprop(RBProp, "resultdir", "Please give path to the RANSACBenchmarkResults repo!")
+
+	# pull result repo
+	cd(resultdir)
+	cleanpull()
+	cd(current_dir)
+
+    savefull_benchmark(benchedtable, bmarkresult, resultdir)
+end
+
+function loadbenchmarks(fname::AbstractString)
     return CSV.read(fname)
+end
+
+function loadbenchmarks()
+	current_dir = pwd()
+
+	RBProp = loadp()
+	resultdir = getdirfromprop(RBProp, "resultdir", "Please give path to the RANSACBenchmarkResults repo!")
+
+	# pull result repo
+	cd(resultdir)
+	cleanpull()
+	cd(current_dir)
+
+    return loadbenchmarks(joinpath(resultdir, "assets", "private", "benchmark_results.csv"))
 end
 
 function printload()
 	printresult(loadbenchmarks())
 end
 
+function setpropfile()
+	RBProp = loadp()
+	ransacdir = getdirfromprop(RBProp, "ransacdir", "Please give path to the RANSAC repo!")
+	APIdir = getdirfromprop(RBProp, "apidir", "Please give path to the MasterThesis repo!")
+	resultdir = getdirfromprop(RBProp, "resultdir", "Please give path to the RANSACBenchmarkResults repo!")
+	resetcommitsha()
+end
+
 function info()
     @info "Runnnig one benchmark takes around 5 minutes."
-    @info "`bmark, benched = runbenchmark();` to run the benchmark (and also display it)."
-    @info "`savebenchmark(bmark)` to append the last benchmark to the CSV file."
+    @info "`bmresult, bmtrial, benched = runbenchmark();` to run the benchmark at the current state of the repo."
+    @info "`savebenchmark(bmresult, benched)` to append the last benchmark to the CSV file."
     @info "`bm = loadbenchmarks();` to load the saved benchmarks."
     @info "`printresult(bmark)` to show the result of one or more benchmarks."
-    @info "`saveresult(bmark)` to save the prettyprint to markdown. This will overwrite the file."
+    @info "Use `printload()` instead of `printresult(loadbenchmarks())`."
+    @info "Use `resetcommitsha()` to reset the last benchmarked commit sha to the first commit, where benchmark possible."
+    @info "Use `lastbenchmarkedcommit!(commitsha)` to reset last benchmark to a given commit."
+    @info "Use `callmeCI(dopublish=true)` to run a CI like benchmark round."
+	@info "Use `setpropfile()` to set not-yet-set Properties."
 end
 
 ##################
 # CI like things #
 ##################
-
-const RPropsfile = "ransacbenchmarkprops.jlprop"
-const commitkey = "lasbenchmarkedcommit"
 
 function loadp()
 	if ! isfile(RPropsfile)
@@ -221,8 +267,29 @@ function lastbenchmarkedcommit(prop, key)
 	getprop!(prop, key, "dd43556f264480208c6a007cf19b7052e67b7ac2")
 end
 
+"""
+    resetcommitsha(prop, key, commsha = "fe1fefceed88508b08dc26fc4835e95ab367e12a")
+
+Resets the commit sha, but doesn't calls `store()`.
+"""
+function resetcommitsha(prop, key, commsha = "fe1fefceed88508b08dc26fc4835e95ab367e12a")
+	setprop(prop, key, commsha)
+end
+
+function resetcommitsha()
+	p = loadp()
+	resetcommitsha(p, commitkey)
+	store(p, RPropsfile)
+end
+
 function lastbenchmarkedcommit!(prop, key, commitsha)
 	setprop(prop, key, commitsha)
+	store(prop, RPropsfile)
+end
+
+function lastbenchmarkedcommit!(commitsha::AbstractString)
+	prop = loadp()
+	setprop(prop, commitkey, commitsha)
 	store(prop, RPropsfile)
 end
 
@@ -230,13 +297,12 @@ function savefull_benchmark(df, bmresult, gitfolder)
 	dirn = joinpath(gitfolder, "assets", "private")
 	savebenchmark(df, joinpath(dirn, "benchmark_results.csv"))
 	dform = DateFormat("Y-mm-ddTH-M-S.s")
-	export_markdown(joinpath(dirn, "pkgbenchmark", Dates.format(Dates.now(), dform)) * ".md", bmresult)
+	export_markdown(joinpath(dirn, "pkgbenchmark", getpc() * Dates.format(Dates.now(), dform)) * ".md", bmresult)
 	@info "PkgBenchmark markdown saved."
 end
 
 function callmeCI(;dopublish=true)
 	current_dir = pwd()
-	commitkey = "lastbenchmarkedcommit"
 
 	RBProp = loadp()
 	ransacdir = getdirfromprop(RBProp, "ransacdir", "Please give path to the RANSAC repo!")
@@ -272,7 +338,6 @@ function callmeCI(;dopublish=true)
 		benched = makedf(bm_trial, nextcommitsha, commitdates[i])
 		savefull_benchmark(benched, bmres, resultdir)
 		benched = true
-
 	end
 
 	if !benched
@@ -285,19 +350,35 @@ function callmeCI(;dopublish=true)
 	lastbenchmarkedcommit!(RBProp, commitkey, commitshas[1])
 
 	if dopublish
-		alldf = loadbenchmarks(joinpath(resultdir, "assets", "private", "benchmark_results.csv"))
-		saveresult(alldf, joinpath(resultdir, "assets", "private", "benchmark_results_all.md"))
-
-		#TODO: save a nicer table too
-
-		# pushing updates
-		cd(resultdir)
-		publish()
-		cd(current_dir)
+		# publish results without pulling
+		publishresults(false)
 	end
 	@info "Finished benchmarking, latest: $(commitshas[1])."
 	@info Dates.now()
 	return nothing
+end
+
+function publishresults(dopull=true)
+	current_dir = pwd()
+
+	RBProp = loadp()
+	resultdir = getdirfromprop(RBProp, "resultdir", "Please give path to the RANSACBenchmarkResults repo!")
+
+	if dopull
+		# pull result repo
+		cd(resultdir)
+		cleanpull()
+		cd(current_dir)
+	end
+
+	alldf = loadbenchmarks(joinpath(resultdir, "assets", "private", "benchmark_results.csv"))
+	bmresultf = joinpath(resultdir, "assets", "private")
+	saveresult(alldf, joinpath(bmresultf, "output", "benchmark_results_all.out"))
+
+	# pushing updates
+	cd(resultdir)
+	publish()
+	cd(current_dir)
 end
 
 end # module
