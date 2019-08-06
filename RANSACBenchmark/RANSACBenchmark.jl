@@ -269,7 +269,6 @@ end
 
 function lastbenchmarkedcommit(prop, key)
 	getprop!(prop, key, LAST_BENCHMARKED)
-	#getprop!(prop, key, "dd43556f264480208c6a007cf19b7052e67b7ac2")
 end
 
 function lastbenchmarkedcommit!(prop, key, commitsha)
@@ -302,7 +301,7 @@ function savefull_benchmark(df, bmresult, gitfolder)
 	dirn = joinpath(gitfolder, "assets", "private")
 	savebenchmark(df, joinpath(dirn, "benchmark_results.csv"))
 	dform = DateFormat("Y-mm-ddTH-M-S.s")
-	export_markdown(joinpath(dirn, "pkgbenchmark", getpc() * Dates.format(Dates.now(), dform)) * ".md", bmresult)
+	export_markdown(joinpath(dirn, "pkgbenchmark", getpc() *"_"* Dates.format(Dates.now(), dform)) * ".md", bmresult)
 	@info "PkgBenchmark markdown saved."
 end
 
@@ -382,9 +381,9 @@ function publishresults(dopull=true)
 		cd(current_dir)
 	end
 
-	alldf = loadbenchmarks(joinpath(resultdir, "assets", "private", "benchmark_results.csv"))
 	bmresultf = joinpath(resultdir, "assets", "private")
-	saveresult(alldf, joinpath(bmresultf, "output", "benchmark_results_all.out"))
+	alldf = loadbenchmarks(joinpath(bmresultf, "benchmark_results.csv"))
+	saveresult(alldf, joinpath(bmresultf, "benchmark_results_all.md"))
 
 	# pushing updates
 	cd(resultdir)
