@@ -64,8 +64,15 @@ function runbenchmark(show = true; showdebug = false)
 end
 
 function makedf(bmresult)
+	current_dir = pwd()
+	RBProp = loadp()
+	ransacdir = getdirfromprop(RBProp, "ransacdir", "Please give path to the RANSAC repo!")
+
+	# get git info
+	cd(ransacdir)
 	comsha = read(`git log -n 1 --pretty=format:"%H"`, String)
 	comdate = read(`git log -n 1 --pretty=format:"%ct"`, String)
+	cd(ransacdir)
 
     pc = getpc()
     mint = BenchmarkTools.minimum(bmresult).time
