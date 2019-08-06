@@ -33,6 +33,12 @@ const commitkey = "lasbenchmarkedcommit"
 
 const BENCHMARK_VERSION = v"1.1.0"
 
+"""First commit where it's possible to benchmark."""
+const FIRST_COMMIT = "fe1fefceed88508b08dc26fc4835e95ab367e12a"
+
+"""This should be used as last benchmarked commit sha for benchmarking every possible commit."""
+const LAST_BENCHMARKED = "ca6a8548cb5b746dbbeb6208f4e2a55c7ab8e0dc"
+
 #######################
 # manual benchmarking #
 #######################
@@ -221,7 +227,7 @@ function info()
     @info "`printresult(bmark)` to show the result of one or more benchmarks."
     @info "Use `printload()` instead of `printresult(loadbenchmarks())`."
     @info "Use `resetcommitsha()` to reset the last benchmarked commit sha to the first commit, where benchmark possible."
-    @info "Use `lastbenchmarkedcommit!(commitsha)` to reset last benchmark to a given commit."
+    @info "Use `lastbenchmarkedcommit!(commitsha)` to reset last benchmark to a given commit (and store it)."
     @info "Use `callmeCI(dopublish=true)` to run a CI like benchmark round."
 	@info "Use `setpropfile()` to set not-yet-set Properties."
 end
@@ -262,7 +268,7 @@ function getdirfromprop(prop, key, question)
 end
 
 function lastbenchmarkedcommit(prop, key)
-	getprop!(prop, key, "fe1fefceed88508b08dc26fc4835e95ab367e12a")
+	getprop!(prop, key, LAST_BENCHMARKED)
 	#getprop!(prop, key, "dd43556f264480208c6a007cf19b7052e67b7ac2")
 end
 
@@ -278,11 +284,11 @@ function lastbenchmarkedcommit!(commitsha::AbstractString)
 end
 
 """
-    resetcommitsha(prop, key, commsha = "fe1fefceed88508b08dc26fc4835e95ab367e12a")
+    resetcommitsha(prop, key, commsha = LAST_BENCHMARKED)
 
 Resets the commit sha, but doesn't calls `store()`.
 """
-function resetcommitsha(prop, key, commsha = "fe1fefceed88508b08dc26fc4835e95ab367e12a")
+function resetcommitsha(prop, key, commsha = LAST_BENCHMARKED)
 	setprop(prop, key, commsha)
 end
 
@@ -338,10 +344,16 @@ function callmeCI(;dopublish=true)
 		savefull_benchmark(benched, bmres, resultdir)
 		benched = true
 	end
-
+	tunef = joinpath(ransacdir, "benchmark", "tune.json")
+	if isfile(tunef)
+		rm(tunef)
+		@info "Removed tune file."
+	else
+		@info "Didn't find tune file."
+	end
 	if !benched
 		@info "Didn't ran any benchmark."
-		@info Dates.now()
+		@info "Time is now: $(Dates.now())"
 		return nothing
 	end
 
@@ -353,7 +365,7 @@ function callmeCI(;dopublish=true)
 		publishresults(false)
 	end
 	@info "Finished benchmarking, latest: $(commitshas[1])."
-	@info Dates.now()
+	@info "Time is now: $(Dates.now())"
 	return nothing
 end
 
