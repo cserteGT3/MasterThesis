@@ -29,7 +29,7 @@ const nums = :r
 const table_align = [:l, :l, :l, nums, nums, nums, nums, nums, nums, :l, :l, :l]
 
 const RPropsfile = "ransacbenchmarkprops.jlprop"
-const commitkey = "lasbenchmarkedcommit"
+const commitkey = "lastbenchmarkedcommit"
 
 const BENCHMARK_VERSION = v"1.1.0"
 
@@ -312,7 +312,7 @@ function savefull_benchmark(df, bmresult, gitfolder)
 	@info "PkgBenchmark markdown saved."
 end
 
-function callmeCI(;dopublish=true)
+function callmeCI(;dopublish=true, commitnumb = 100)
 	current_dir = pwd()
 
 	RBProp = loadp()
@@ -323,8 +323,8 @@ function callmeCI(;dopublish=true)
 	# Pull ransac repo
 	cd(ransacdir)
 	run(`git pull`)
-	rshas = read(`git log -n 50 --pretty=format:"%H"`, String)
-	rdates = read(`git log -n 50 --pretty=format:"%ct"`, String)
+	rshas = read(`git log -n $commitnumb --pretty=format:"%H"`, String)
+	rdates = read(`git log -n $commitnumb --pretty=format:"%ct"`, String)
 
 	# pull result repo
 	cd(resultdir)
@@ -336,8 +336,14 @@ function callmeCI(;dopublish=true)
 	commitdates = [unix2datetime(parse(Int, i)) for i in commitdates_]
 
 	lastnum = findfirst(x->x==lastbenchmarkedcommit(RBProp, commitkey), commitshas)
-	deleteat!(commitshas, lastnum:size(commitshas,1))
+	endnum = size(commitshas, 1)
+	deleteat!(commitshas, lastnum:endnum)
+	deleteat!(commitdates, lastnum:endnum)
 
+	reverse!(commitshas)
+	reverse!(commitdates)
+
+	tunef = joinpath(ransacdir, "benchmark", "tune.json")
 	benched = false
 	for i in eachindex(commitshas)
 	# loop over commits
@@ -348,23 +354,27 @@ function callmeCI(;dopublish=true)
 		bm_trial = bmres.benchmarkgroup.data["RANSAC"]["smallideal"]
 		benched = makedf(bm_trial, nextcommitsha, commitdates[i])
 		savefull_benchmark(benched, bmres, resultdir)
+
+		# remove tune file
+		if isfile(tunef)
+			rm(tunef)
+			@info "Removed tune file."
+		else
+			@info "Didn't find tune file."
+		end
+
+		# store commit sha
+		lastbenchmarkedcommit!(RBProp, commitkey, nextcommitsha)
+
 		benched = true
 	end
-	tunef = joinpath(ransacdir, "benchmark", "tune.json")
-	if isfile(tunef)
-		rm(tunef)
-		@info "Removed tune file."
-	else
-		@info "Didn't find tune file."
-	end
+
 	if !benched
 		@info "Didn't ran any benchmark."
 		@info "Time is now: $(Dates.now())"
 		return nothing
 	end
 
-	# store commit sha
-	lastbenchmarkedcommit!(RBProp, commitkey, commitshas[1])
 
 	if dopublish
 		# publish results without pulling
