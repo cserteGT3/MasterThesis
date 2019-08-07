@@ -235,7 +235,7 @@ function info()
     @info "Use `printload()` instead of `printresult(loadbenchmarks())`."
     @info "Use `resetcommitsha()` to reset the last benchmarked commit sha to the first commit, where benchmark possible."
     @info "Use `lastbenchmarkedcommit!(commitsha)` to reset last benchmark to a given commit (and store it)."
-    @info "Use `callmeCI(dopublish=true)` to run a CI like benchmark round."
+    @info "Use `callmeCI(;dopublish=true, commitnumb = 100, skipcommits=nothing)` to run a CI like benchmark round."
 	@info "Use `setpropfile()` to set not-yet-set Properties."
 end
 
@@ -312,7 +312,7 @@ function savefull_benchmark(df, bmresult, gitfolder)
 	@info "PkgBenchmark markdown saved."
 end
 
-function callmeCI(;dopublish=true, commitnumb = 100)
+function callmeCI(;dopublish=true, commitnumb = 100, skipcommits::Union{Array{String,1},Nothing}=nothing)
 	current_dir = pwd()
 
 	RBProp = loadp()
@@ -346,6 +346,12 @@ function callmeCI(;dopublish=true, commitnumb = 100)
 	tunef = joinpath(ransacdir, "benchmark", "tune.json")
 	benched = false
 	for i in eachindex(commitshas)
+		# skip commit if in skipcommits
+		if vectequal(commitshas[i], skipcommits)
+			@info "Skipping $(commitshas[i])"
+			continue
+		end
+
 	# loop over commits
 		nextcommitsha = commitshas[i]
 		@info "Current commit: $nextcommitsha"
@@ -384,6 +390,17 @@ function callmeCI(;dopublish=true, commitnumb = 100)
 	@info "Time is now: $(Dates.now())"
 	return nothing
 end
+
+function vectequal(ref, strings)
+	for s in strings
+		if ref == s
+			return true
+		end
+	end
+	return false
+end
+
+vectequal(ref, strings::Nothing) = false
 
 function publishresults(dopull=true)
 	current_dir = pwd()
