@@ -1,13 +1,9 @@
 vs, ns, norms4Plot, shape_s = examplepc3();
-pcr = PointCloud(vs, ns, 32);
-p_ae = (ϵ = 0.3, α=deg2rad(5));
-cy_ae = (ϵ = 0.3, α=deg2rad(5));
-sp_ae = (ϵ = 0.3, α=deg2rad(5));
-one_ae = AlphSilon(sp_ae, p_ae, cy_ae);
-tt = 15;
-ptt = 0.9
-ττ = 900
-# maximum number of iteration
-itermax = 20
-draws = 3
-ransac(pcr, one_ae, tt, ptt, ττ, itermax, draws, 500, true);
+pcr = PointCloud(vs, ns, 32)
+p = RANSACParameters{Float64}()
+p = RANSACParameters(p, ϵ_plane=0.3, α_plane=deg2rad(5))
+p = RANSACParameters(p, ϵ_cylinder=0.3, α_cylinder=deg2rad(5))
+p = RANSACParameters(p, ϵ_sphere=0.3, α_sphere=deg2rad(5))
+p = RANSACParameters(p, minsubsetN=15, prob_det=0.9, τ=900)
+p = RANSACParameters(p, itermax=20, drawN=3)
+ransac(pcr, p, true);
