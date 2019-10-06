@@ -4,5 +4,5 @@ using ProfileView
 
 include("___usethis___.jl")
 Profile.clear()
-@profile ransac(pcr, one_ae, tt, ptt, ττ, 20000, draws, 500, true);
+@profile ransac(pcr, RANSACParameters(p, itermax=20_000) , true);
 ProfileView.view()

@@ -16,24 +16,9 @@ sc.center = false
 #Makie.save("pure3-normals.png", sc)
 # (normalize surface normals if needed)
 pcr = PointCloud(vs, ns, 32);
-# plane
-p_ae = (ϵ = 0.3, α=deg2rad(5));
-# cylidner
-cy_ae = (ϵ = 0.3, α=deg2rad(5));
-# sphere
-sp_ae = (ϵ = 0.3, α=deg2rad(5));
-one_ae = AlphSilon(sp_ae, p_ae, cy_ae);
-# number of minimal subsets drawed in one iteration
-tt = 15;
-# probability that we found shapes
-ptt = 0.9
-# minimum shape size
-ττ = 900
-# maximum number of iteration
-itermax = 20
-# size of the minimal set
-draws = 3
-cand, extr = ransac(pcr, one_ae, tt, ptt, ττ, itermax, draws, 500, true)
+#RANSAC parameters
+p = RANSACParameters{Float64}(itermax=20)
+cand, extr = ransac(pcr, p, true)
 #leftover = getrest(pcr);
 showtype(extr)
 sc = showshapes(pcr, extr)
