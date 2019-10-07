@@ -43,3 +43,17 @@ print_tree(n1)
 evaluate(n1, v1)
 
 collect(StatelessBFS(n2))
+
+## Write to paraview
+sf0 = ImplicitSphere(SVector(0,0,0), 5)
+nd0 = CSGNode(sf0, ())
+
+writeparaviewformat(sf0, "sphere5", (-10, 10, 100))
+
+sf01 = ImplicitSphere(SVector(2.5,2.5,2.5), 5.)
+nd01 = CSGNode(sf01, ())
+compnd01 = CSGNode(CSGBuilding.complement, (nd01, ))
+tree01 = CSGNode(CSGBuilding.union, (nd0, compnd01))
+tree01 = CSGNode(CSGBuilding.subtraction, (nd0, nd01))
+
+writeparaviewformat(tree01, "sphere5", (-10, 10, 100))
