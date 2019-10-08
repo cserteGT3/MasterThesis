@@ -3,6 +3,7 @@ using AbstractTrees
 
 using Revise
 using CSGBuilding
+cd(@__DIR__)
 
 ## Tree
 v1 = SVector(0,0,0.0)
