@@ -73,3 +73,24 @@ d = [0,0,1];
 q = [1,0,1];
 
 CSGB.vectorfromline(p, d, [1,0,0])
+
+
+## Random trees
+n1 = SVector(1,0,0.0);
+n2 = SVector(0,1,0.0);
+n3 = SVector(0,0,1.0);
+v1 = SVector(0,0,0.0);
+
+cyn =  ImplicitCylinder(SVector(0,0,1), SVector(0,0,0),1)
+sf1 = ImplicitSphere(v1, 0.5)
+sf2 = ImplicitSphere(v1, 1.0)
+pl1 = ImplicitPlane(n1, n1)
+pl2 = ImplicitPlane(n2, n2)
+pl3 = ImplicitPlane(n3, n3)
+pl4 = ImplicitPlane(-n1, -n1)
+pl5 = ImplicitPlane(-n2, -n2)
+pl6= ImplicitPlane(-n3, -n3)
+
+surfac = [cyn, sf1, sf2, pl1, pl2, pl3, pl4, pl5, pl6]
+
+tr = randomtree(surfac, 10)
