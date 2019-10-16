@@ -20,7 +20,7 @@ nd1 = CSGNode(CSGB.union, [subnode1, subnode2])
 
 nd2 = CSGNode(CSGB.union, [nd1, CSGNode(CSGB.complement, [subnode1])])
 
-nd3 = CSGNode(CSGB.subtraction, [nd1, CSGNode(CSGB.complement, [subnode1])])
+nd3 = CSGNode(CSGB.subtraction, [deepcopy(nd1), CSGNode(CSGB.complement, [subnode1])])
 
 nd4 = CSGNode(CSGB.subtraction, [subnode1, subnode2])
 
@@ -94,3 +94,14 @@ pl6= ImplicitPlane(-n3, -n3)
 surfac = [cyn, sf1, sf2, pl1, pl2, pl3, pl4, pl5, pl6]
 
 tr = randomtree(surfac, 10)
+
+## Crossover
+
+nd1 = CSGNode(CSGB.union, [subnode1, subnode2])
+
+nd2 = CSGNode(CSGB.union, [nd1, CSGNode(CSGB.complement, [subnode1])])
+
+nd31 = CSGNode(CSGB.subtraction, [subnode1, subnode2])
+nd3 = CSGNode(CSGB.subtraction, [nd31, CSGNode(CSGB.complement, [subnode1])])
+
+ansi = crossover(news, p);

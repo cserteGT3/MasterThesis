@@ -3,7 +3,7 @@ using AbstractTrees
 
 using Revise
 using CSGBuilding
-
+const CSGB = CSGBuilding
 cd(@__DIR__)
 
 n1 = SVector(1,0,0.0);
