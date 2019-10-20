@@ -6,6 +6,7 @@ const CSGB = CSGBuilding
 using FileIO
 using GeometryTypes
 using LinearAlgebra: normalize
+using FileIO: load
 
 cd(@__DIR__)
 
@@ -23,21 +24,15 @@ function makeit()
 end
 
 wtr, surfs = makeit();
+edgel = (mincorner=-5, maxcorner=5, edgelength=150);
 
-writeparaviewformat(wtr, "wtr", (-5, 5, 150))
-
-function loaddata()
-    wtrm = load("wtr.obj")
-    vs = vertices(wtrm)
-    ns = normalize.(normals(wtrm))
-    return vs, ns
-end
+writeparaviewformat(wtr, "wtr", edgel)
 
 function testwtr(p, n, surfac, iters)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
     return cachedgeneticbuildtree(surfac, p, n, pari)
 end
 
-vsw, nsw = loaddata();
+vsw, nsw = readobj("wtr.obj", edgel);
 
 alls, bestt = testwtr(vsw, nsw, surfs, 10);
