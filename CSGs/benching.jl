@@ -2,12 +2,9 @@ using StaticArrays
 using AbstractTrees
 using Random
 
-using RANSAC
-using Revise
 using CSGBuilding
 const CSGB = CSGBuilding
-cd(@__DIR__)
-
+using RANSAC
 
 n1 = SVector(1,0,0.0);
 n2 = SVector(0,1,0.0);
@@ -32,12 +29,6 @@ pln5 = CSGNode(pl5, [])
 pl6= ImplicitPlane(-n3, -n3)
 pln6 = CSGNode(pl6, [])
 
-tr1 = CSGNode(CSGBuilding.intersection, [pln1, pln2])
-tr2 = CSGNode(CSGBuilding.intersection, [pln3, pln4])
-tr3 = CSGNode(CSGBuilding.intersection, [tr1, tr2])
-tr4 = CSGNode(CSGBuilding.intersection, [tr3, pln5])
-tr5 = CSGNode(CSGBuilding.intersection, [tr4, pln6])
-
 function sampleunitcube(ranges)
     # it's not a unit cube, but every coordinate is -1, 0 or 1
     l = (2,2)
@@ -52,21 +43,33 @@ function sampleunitcube(ranges)
     return (vcat(v1,v2,v3,v4,v5,v6), vcat(n1,n2,n3,n4,n5,n6))
 end
 
-vs2, ns2 = sampleunitcube(50);
+vs2, ns2 = sampleunitcube(25);
+
+p = CSGGeneticBuildParameters{Float64}(itermax=5);
 
 
-## cached-tree
-felületek = [pl1, pl2, pl3, pl4, pl5, pl6]
-pontok = [[0.,0,0], [1,1,1], [2,2,2]]
+# not cached
+surfac = [pln1,pln2,pln3,pln4,pln5,pln6];
+println("genetic build")
+Random.seed!(1234);
+result = geneticbuildtree(surfac, vs2, ns2, p);
+println("genetic build finished")
 
-cnodes, cvals, cnorms = cachenodes(felületek, pontok)
+# cached
+felületek = [pl1, pl2, pl3, pl4, pl5, pl6];
+println("cached genetic build")
+Random.seed!(1234);
+res = cachedgeneticbuildtree(felületek, vs2, ns2, p);
+println("cached genetic build finished")
 
-trc1 = CachedCSGNode(CSGBuilding.intersection, [cnodes[1], cnodes[2]])
-trc2 = CachedCSGNode(CSGBuilding.intersection, [cnodes[3], cnodes[4]])
-trc3 = CachedCSGNode(CSGBuilding.intersection, [trc1, trc2])
-trc4 = CachedCSGNode(CSGBuilding.intersection, [trc3, cnodes[5]])
-trc5 = CachedCSGNode(CSGBuilding.intersection, [trc4, cnodes[6]])
+p = CSGGeneticBuildParameters{Float64}(itermax=20);
+println("itermax set to 20")
+println("threaded benching genetic build")
+Random.seed!(1234);
+@time geneticbuildtree(surfac, vs2, ns2, p);
+println("finished benching genetic build")
 
-## cached genetic
-p = CSGGeneticBuildParameters(itermax=2)
-res = cachedgeneticbuildtree(felületek, vs2, ns2, p)
+println("threaded benching cached genetic build")
+Random.seed!(1234);
+@time cachedgeneticbuildtree(felületek, vs2, ns2, p);
+println("finished benching cached genetic build")
