@@ -41,3 +41,5 @@ end
 vsw, nsw = loaddata();
 
 alls, bestt = testwtr(vsw, nsw, surfs, 10);
+
+writeparaviewformat(bestt, "bestwtr", (-7,7,100))
