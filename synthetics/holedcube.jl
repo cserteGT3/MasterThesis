@@ -34,7 +34,8 @@ function makeit()
     tr4 = CSGNode(CSGBuilding.intersection, [tr3, pln5])
     tr5 = CSGNode(CSGBuilding.intersection, [tr4, pln6])
 
-    midpl = CSGNode(ImplicitPlane([4,4,0.25], -n3), [])
+    mpl = ImplicitPlane([4,4,0.25], -n3)
+    midpl = CSGNode(mpl, [])
 
     cyl = ImplicitCylinder([0,0,1], [0,0,0], .25)
     cyln = CSGNode(cyl, [])
@@ -42,7 +43,7 @@ function makeit()
     cyld = CSGNode(CSGB.intersection, [midpl, cyln])
 
     tr = CSGNode(CSGB.subtraction, [tr5, cyld])
-    return tr, [pl1, pl2, pl3, pl4, pl5, pl6, cyl, midpl]
+    return tr, [pl1, pl2, pl3, pl4, pl5, pl6, cyl, mpl]
 end
 
 hcube, surfs = makeit();
