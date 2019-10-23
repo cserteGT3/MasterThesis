@@ -1,8 +1,8 @@
 using StaticArrays
 using AbstractTrees
-using FileIO
 using GeometryTypes
 using RANSAC
+using D3Trees
 using Revise
 using CSGBuilding
 const CSGB = CSGBuilding
@@ -50,7 +50,7 @@ hcube, surfs = makeit();
 
 edgel = (mincorner=-2, maxcorner=2, edgelength=110);
 
-writeparaviewformat(hcube, "hcube", edgel)
+#writeparaviewformat(hcube, "hcube", edgel)
 
 function testwtr(p, n, surfac, iters)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
@@ -59,4 +59,16 @@ end
 
 vhc, nhc = readobj("hcube.obj", edgel);
 
+# test run
 alls, bestt = testwtr(vhc, nhc, surfs, 10);
+
+# real run
+alls, bestt = testwtr(vhc, nhc, surfs, 3000);
+# write to be able to check
+writeparaviewformat(bestt, "besthcube", edgel)
+
+try
+    inchrome(D3Tree(bestt))
+catch
+    println("as expected")
+end

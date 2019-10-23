@@ -111,6 +111,12 @@ git-tree-sha1 = "0a106457a1831555857e18ac9617279c22fc393b"
 uuid = "dc8bdbbb-1ca9-579f-8c36-e416f6a65cce"
 version = "0.2.0"
 
+[[D3Trees]]
+deps = ["AbstractTrees", "Base64", "JSON", "Random", "Test"]
+git-tree-sha1 = "311af855efa91a595940cd5c0cdb0ff9e8d6b948"
+uuid = "e3df1716-f71e-5df9-9e2d-98e193103c45"
+version = "0.3.1"
+
 [[DataAPI]]
 git-tree-sha1 = "674b67f344687a88310213ddfa8a2b3c76cc4252"
 uuid = "9a962f9c-6df0-11e9-0e5d-c546b8b5ee8a"

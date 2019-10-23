@@ -1,12 +1,12 @@
 using StaticArrays
 using AbstractTrees
-using CSGBuilding
 using RANSAC
-const CSGB = CSGBuilding
-using FileIO
 using GeometryTypes
 using LinearAlgebra: normalize
-using FileIO: load
+using D3Trees
+using Revise
+using CSGBuilding
+const CSGB = CSGBuilding
 
 cd(@__DIR__)
 
@@ -26,7 +26,7 @@ end
 wtr, surfs = makeit();
 edgel = (mincorner=-5, maxcorner=5, edgelength=150);
 
-writeparaviewformat(wtr, "wtr", edgel)
+# writeparaviewformat(wtr, "wtr", edgel)
 
 function testwtr(p, n, surfac, iters)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
@@ -35,6 +35,16 @@ end
 
 vsw, nsw = readobj("wtr.obj", edgel);
 
+# test run
 alls, bestt = testwtr(vsw, nsw, surfs, 10);
 
-writeparaviewformat(bestt, "bestwtr", (-7,7,100))
+# real run
+alls, bestt = testwtr(vsw, nsw, surfs, 3000);
+
+writeparaviewformat(bestt, "bestwtr", edgel)
+
+try
+    inchrome(D3Tree(bestt))
+catch
+    println("as expected")
+end

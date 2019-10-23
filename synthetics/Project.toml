@@ -1,6 +1,7 @@
 [deps]
 AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
 CSGBuilding = "a69a8ca4-c74f-409f-8e6c-efe80ff0e05d"
+D3Trees = "e3df1716-f71e-5df9-9e2d-98e193103c45"
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 GeometryTypes = "4d00f742-c7ba-57c2-abde-4428a4b178cb"
 MeshIO = "7269a6da-0436-5bbc-96c2-40638cbb6118"
