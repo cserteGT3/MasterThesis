@@ -129,7 +129,7 @@ pontok = [[0.,0,0], [1,1,1], [2,2,2]]
 cnodes, cvals, cnorms = cachenodes(surfac, pontok)
 
 
-mutable struct CodeWrap
+struct CodeWrap
     Core::Array{Expr,1}
     Params::Array{Symbol,1}
 end
@@ -163,19 +163,37 @@ f1(cvals, 1)
 
 codeun = :(:call, CSGB.union, $code1, $code2)
 
-function func2(expr)
+nl = Set{CachedCSGNode}(Leaves(trc))
 
 
+ctrc = collect(PostOrderDFS(trc))
 
+exp1 = leaf2code(ctrc[1], gensym(), gensym())
+exp2 = node2code(ctrc[4])
+exp3 = node2code(ctrc[5])
+
+function t2c(tree::CachedCSGNode)
+    _cachedv = gensym()
+    _inds = gensym()
+    exprs = Array{Expr,1}(undef,0)
+    for l in Set{CachedCSGNode}(Leaves(tree))
+        push!(exprs, leaf2code(l, _cachedv, _inds))
+    end
+    for n in PostOrderDFS(tree)
+        isempty(n.children) && continue
+        push!(exprs, node2code(n))
+    end
+    return CodeWrap(exprs, [_cachedv, _inds])
 end
 
+exprsss = t2c(trc)
+expp1 = c2f(exprsss)
 
-z = to_code(
-    SUnion(
-    (Trans(Sphere(5*sqrt(2),4),space(0.0,-10.0,0.0)),
-    Trans(Ball(5*sqrt(2),5,1),space(0.0,5.0,8.66)),
-    Trans(Ball(5*sqrt(2),6,0.5),space(0.0,5.0,-8.66)),
-    Plane(space(1.0,0.0,0.0),2),
-    RepQ(Trans(Ball(0.5,1,3.5),space(2.5,2.5,2.5)),5.0),
-    Trans(Ball(5,3,2.5),space(0.0,0.0,0.0)))
-    ))
+function c2f(cwrap)
+    expr = Expr(:->,
+        Expr(:tuple,
+        cwrap.Params[1],
+        cwrap.Params[2]),
+        Expr(:block,cwrap.Core...))
+    return expr
+end

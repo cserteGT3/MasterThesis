@@ -15,7 +15,7 @@ end
 
 function prettyprint(benchArr, timeres=:ms)
 	headTab = ["parse" "minimum time" "median time" "mean time" "maximum time" "allocs" "memory"; "" "TIME" "TIME" "TIME" "TIME" "" "KiB"]
-	ht = replace(headTab, "TIME"=>tdict[timeres])
+	ht = replace(headTab, "TIME"=>String(timeres))
 	pretty_table(evalBs(benchArr, timeres), ht, formatter=ft_round(3))
 end
 @info "Use prettyprint(benchArr) to print the results."
