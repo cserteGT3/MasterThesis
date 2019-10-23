@@ -55,7 +55,7 @@ function b3(surfaces, rpoints, treenum=10, treedepth=10)
     Random.seed!(1234);
     rcs_ = [randomcachedtree(cnodes, treedepth) for i in 1:treenum]
     sp = 0.
-    es = [code2func(tree2code(r)) for r in rcs_]
+    es = [CSGB.code2func(CSGB.tree2code(r)) for r in rcs_]
     for i in eachindex(es)
         f = es[i]
         for j in eachindex(cvals)
@@ -70,7 +70,7 @@ function b4(surfaces, rpoints, treenum=10, treedepth=10)
     Random.seed!(1234);
     rcs_ = [randomcachedtree(cnodes, treedepth) for i in 1:treenum]
     sp = 0.
-    es = [code2func(tree2code(r)) for r in rcs_]
+    es = [CSGB.code2func(CSGB.tree2code(r)) for r in rcs_]
     for i in eachindex(es)
         f = es[i]
         for j in eachindex(cvals)
@@ -86,7 +86,7 @@ function b5(surfaces, rpoints, treenum=10, treedepth=10)
     rcs_ = [randomcachedtree(cnodes, treedepth) for i in 1:treenum]
     sp = 0.
     for i in eachindex(rcs_)
-        f = code2func(tree2code(rcs_[i]))
+        f = CSGB.code2func(CSGB.tree2code(rcs_[i]))
         for j in eachindex(cvals)
             ev = Base.invokelatest(f, cvals, j)::CachedResult
             sp += value(ev)
@@ -110,7 +110,7 @@ function b6(surfaces, rpoints, treenum=10, treedepth=10)
     rcs_ = [randomcachedtree(cnodes, treedepth) for i in 1:treenum]
     sp = 0.
     for i in eachindex(rcs_)
-        f = c2f(tree2code(rcs_[i]))
+        f = c2f(CSGB.tree2code(rcs_[i]))
         for j in eachindex(cvals)
             ev = Base.invokelatest(f, cvals, j)::CachedResult
             sp += value(ev)
@@ -193,3 +193,35 @@ res9 = @benchmark b9($evaltupl...)
 
 bm = [res1, res2, res3, res4, res5, res6, res7, res8, res9];
 prettyprint(bm, :ms, :KiB)
+
+#=
+points = [rand(3) for i in 1:10000];
+evaltupl = (surfac, points, 30, 10)
+┌───────┬──────────────┬─────────────┬───────────┬──────────────┬─────────────┬────────┐
+│ parse │ minimum time │ median time │ mean time │ maximum time │      allocs │ memory │
+│       │            s │           s │         s │            s │             │    GiB │
+├───────┼──────────────┼─────────────┼───────────┼──────────────┼─────────────┼────────┤
+│   1.0 │        4.077 │       4.162 │     4.162 │        4.248 │ 2.7851485e7 │  0.762 │
+│   2.0 │         1.46 │        1.48 │     1.479 │        1.497 │ 2.8364701e7 │  0.731 │
+│   3.0 │        2.049 │       2.092 │     2.082 │        2.105 │  4.620365e6 │  0.179 │
+│   4.0 │        2.058 │       2.074 │     2.074 │        2.089 │  4.020364e6 │   0.17 │
+│   6.0 │        2.062 │       2.064 │     2.074 │        2.095 │  3.874972e6 │  0.163 │
+│   7.0 │        2.016 │        2.03 │     2.051 │        2.108 │  3.874968e6 │  0.163 │
+│   8.0 │        2.164 │       2.247 │     2.258 │        2.362 │    4.0203e6 │   0.17 │
+│   9.0 │        2.217 │       2.332 │     2.347 │        2.492 │    4.0203e6 │   0.17 │
+└───────┴──────────────┴─────────────┴───────────┴──────────────┴─────────────┴────────┘
+┌───────┬──────────────┬─────────────┬───────────┬──────────────┬─────────────┬────────────┐
+│ parse │ minimum time │ median time │ mean time │ maximum time │      allocs │     memory │
+│       │           ms │          ms │        ms │           ms │             │        KiB │
+├───────┼──────────────┼─────────────┼───────────┼──────────────┼─────────────┼────────────┤
+│   1.0 │      4077.03 │     4162.44 │   4162.44 │      4247.85 │ 2.7851485e7 │ 798999.281 │
+│   2.0 │     1460.106 │    1480.432 │  1479.431 │     1496.753 │ 2.8364701e7 │ 766863.047 │
+│   3.0 │     2049.275 │    2091.997 │  2082.078 │      2104.96 │  4.620365e6 │ 187828.959 │
+│   4.0 │     2058.043 │    2074.288 │  2073.879 │     2089.304 │  4.020364e6 │ 178453.821 │
+│   5.0 │     2051.798 │    2082.938 │   2133.52 │     2265.823 │  3.874968e6 │ 170764.343 │
+│   6.0 │     2061.998 │    2064.287 │  2073.885 │     2095.371 │  3.874972e6 │ 170768.396 │
+│   7.0 │     2015.956 │    2029.922 │  2051.206 │     2107.738 │  3.874968e6 │ 170764.343 │
+│   8.0 │     2163.749 │    2246.557 │  2257.594 │     2362.476 │    4.0203e6 │ 178451.083 │
+│   9.0 │     2217.413 │    2331.571 │  2346.892 │     2491.693 │    4.0203e6 │ 178451.083 │
+└───────┴──────────────┴─────────────┴───────────┴──────────────┴─────────────┴────────────┘
+=#
