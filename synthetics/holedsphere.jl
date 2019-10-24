@@ -30,16 +30,17 @@ edgel = (mincorner=-5, maxcorner=5, edgelength=150);
 
 function testwtr(p, n, surfac, iters)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
-    return cachedgeneticbuildtree(surfac, p, n, pari)
+    @info "Cached genetic func buiild tree with $iters iterations."
+    return cachedfuncgeneticbuildtree(surfac, p, n, pari)
 end
 
 vsw, nsw = readobj("wtr.obj", edgel);
 
 # test run
-alls, bestt = testwtr(vsw, nsw, surfs, 10);
+#alls, bestt = testwtr(vsw, nsw, surfs, 2);
 
 # real run
-alls, bestt = testwtr(vsw, nsw, surfs, 3000);
+alls, bestt = testwtr(vsw, nsw, surfs, 400);
 
 writeparaviewformat(bestt, "bestwtr", edgel)
 
@@ -48,3 +49,5 @@ try
 catch
     println("as expected")
 end
+
+println("finished")
