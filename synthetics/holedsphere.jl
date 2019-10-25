@@ -37,12 +37,12 @@ end
 vsw, nsw = readobj("wtr.obj", edgel);
 
 # test run
-alls, bestt = testwtr(vsw, nsw, surfs, 2);
+alls, besttr, besttrc = testwtr(vsw, nsw, surfs, 2);
 
 # real run
 alls, bestt = testwtr(vsw, nsw, surfs, 3000);
 
-writeparaviewformat(bestt, "bestwtr", edgel)
+writeparaviewformat(besttr, "bestwtr", edgel)
 
 try
     inchrome(D3Tree(alls[1]))
