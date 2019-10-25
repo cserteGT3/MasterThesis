@@ -37,7 +37,7 @@ end
 vsw, nsw = readobj("wtr.obj", edgel);
 
 # test run
-#alls, bestt = testwtr(vsw, nsw, surfs, 2);
+alls, bestt = testwtr(vsw, nsw, surfs, 2);
 
 # real run
 alls, bestt = testwtr(vsw, nsw, surfs, 400);
