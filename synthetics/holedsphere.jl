@@ -37,17 +37,17 @@ end
 vsw, nsw = readobj("wtr.obj", edgel);
 
 # test run
-alls, bestt = testwtr(vsw, nsw, surfs, 2);
+alls, besttr, besttrc = testwtr(vsw, nsw, surfs, 2);
 
 # real run
-alls, bestt = testwtr(vsw, nsw, surfs, 400);
+alls, besttr, besttrc = testwtr(vsw, nsw, surfs, 3000);
 
-writeparaviewformat(bestt, "bestwtr", edgel)
+writeparaviewformat(besttr, "bestwtr", edgel)
 
 try
-    inchrome(D3Tree(bestt))
-catch
+    inchrome(D3Tree(besttrc))
+catch e
+    Base.showerror(stdout, e)
     println("as expected")
 end
-
-println("finished")
+println("fully finished")

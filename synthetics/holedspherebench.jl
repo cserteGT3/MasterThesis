@@ -49,13 +49,56 @@ vsw, nsw = readobj("wtr.obj", edgel);
 size(vsw)
 
 # test run
-alls, bestt = testwtr1(vsw, nsw, surfs, 2);
+alls, besttr, besttrc = testwtr1(vsw, nsw, surfs, 2);
 vsw, nsw = readobj("wtr.obj", edgel);
-alls, bestt = testwtr2(vsw, nsw, surfs, 50);
+alls, besttr, besttrc = testwtr2(vsw, nsw, surfs, 50);
 vsw, nsw = readobj("wtr.obj", edgel);
-alls, bestt = testwtr3(vsw, nsw, surfs, 50);
+alls, besttr, besttrc = testwtr3(vsw, nsw, surfs, 50);
 println("something useful")
 # real run
 #alls, bestt = testwtr(vsw, nsw, surfs, 3000);
 
 #writeparaviewformat(bestt, "bestwtr", edgel)
+
+
+#=
+Result on work laptop:
+C:\Users\cstamas\Documents\GIT\MasterThesis\synthetics>set JULIA_NUM_THREADS=4
+
+C:\Users\cstamas\Documents\GIT\MasterThesis\synthetics>julia holedspherebench.jl
+[ Info: Genetic build tree with 2 iterations.
+[ Info: 1-th iteration
+[ Info: 2-th iteration
+[ Info: Finished: 2 iteration in 443.16 seconds.
+[ Info: Cached genetic build tree with 50 iterations.
+[ Info: Iteration in progress...
+[ Info: 5-th iteration
+[ Info: 10-th iteration
+[ Info: 15-th iteration
+[ Info: 20-th iteration
+[ Info: 25-th iteration
+[ Info: 30-th iteration
+[ Info: 35-th iteration
+[ Info: 40-th iteration
+[ Info: 45-th iteration
+[ Info: 50-th iteration
+[ Info: Finished: 50 iteration in 4453.97 seconds.
+[ Info: Cached genetic func build tree with 50 iterations.
+[ Info: Iteration in progress...
+[ Info: 5-th iteration
+[ Info: 10-th iteration
+[ Info: 15-th iteration
+[ Info: 20-th iteration
+[ Info: 25-th iteration
+[ Info: 30-th iteration
+[ Info: 35-th iteration
+[ Info: 40-th iteration
+[ Info: 45-th iteration
+[ Info: 50-th iteration
+[ Info: Finished: 50 iteration in 2523.42 seconds.
+something useful
+
+C:\Users\cstamas\Documents\GIT\MasterThesis\synthetics>
+
+
+=#

@@ -60,15 +60,17 @@ end
 vhc, nhc = readobj("hcube.obj", edgel);
 
 # test run
-alls, bestt = testwtr(vhc, nhc, surfs, 10);
+alls, besttr, besttrc = testwtr(vhc, nhc, surfs, 10);
 
 # real run
-alls, bestt = testwtr(vhc, nhc, surfs, 3000);
+alls, besttr, besttrc = testwtr(vhc, nhc, surfs, 3000);
 # write to be able to check
-writeparaviewformat(bestt, "besthcube", edgel)
+writeparaviewformat(besttr, "besthcube", edgel)
 
 try
-    inchrome(D3Tree(bestt))
-catch
+    inchrome(D3Tree(besttrc))
+catch e
+    Base.showerror(stdout, e)
     println("as expected")
 end
+println("fully finished")
