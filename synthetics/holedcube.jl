@@ -68,7 +68,10 @@ alls, bestt = testwtr(vhc, nhc, surfs, 3000);
 writeparaviewformat(bestt, "besthcube", edgel)
 
 try
-    inchrome(D3Tree(bestt))
-catch
+    inchrome(D3Tree(alls[1]))
+catch e
+    showerror(stdout, e)
     println("as expected")
 end
+
+println("fully finished")
