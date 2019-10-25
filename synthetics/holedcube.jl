@@ -60,12 +60,12 @@ end
 vhc, nhc = readobj("hcube.obj", edgel);
 
 # test run
-alls, besttr, besttrc = testwtr(vhc, nhc, surfs, 10);
+alls, bestt = testwtr(vhc, nhc, surfs, 10);
 
 # real run
-alls, besttr, besttrc = testwtr(vhc, nhc, surfs, 3000);
+alls, bestt = testwtr(vhc, nhc, surfs, 3000);
 # write to be able to check
-writeparaviewformat(besttr, "besthcube", edgel)
+writeparaviewformat(bestt, "besthcube", edgel)
 
 try
     inchrome(D3Tree(alls[1]))

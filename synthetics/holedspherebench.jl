@@ -49,11 +49,11 @@ vsw, nsw = readobj("wtr.obj", edgel);
 size(vsw)
 
 # test run
-alls, besttr = testwtr1(vsw, nsw, surfs, 2);
+alls, bestt = testwtr1(vsw, nsw, surfs, 2);
 vsw, nsw = readobj("wtr.obj", edgel);
-alls, besttr = testwtr2(vsw, nsw, surfs, 50);
+alls, bestt = testwtr2(vsw, nsw, surfs, 50);
 vsw, nsw = readobj("wtr.obj", edgel);
-alls, besttr = testwtr3(vsw, nsw, surfs, 50);
+alls, bestt = testwtr3(vsw, nsw, surfs, 50);
 println("something useful")
 # real run
 #alls, bestt = testwtr(vsw, nsw, surfs, 3000);
