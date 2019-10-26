@@ -37,12 +37,12 @@ vsw, nsw = readobj("wtr.obj", edgel);
 
 #global_logger(RANSAC.nosource_debuglogger())
 # test run
-alls, bestt = testwtr(vsw, nsw, surfs, 2, maxdepth=10);
+alls, bestt = testwtr(vsw, nsw, surfs, 2, maxdepth=5);
 
 # real run
-alls, bestt = testwtr(vsw, nsw, surfs, 200, maxdepth=10);
+alls, bestt = testwtr(vsw, nsw, surfs, 1100, maxdepth=5);
 
-writeparaviewformat(besttr, "bestwtr", edgel)
+writeparaviewformat(bestt, "bestwtr", edgel)
 
 tofile(D3Tree(alls[1]), "holedsphere.html")
 
