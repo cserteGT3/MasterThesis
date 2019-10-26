@@ -20,8 +20,8 @@ end
 
 function testwtr(p, n, surfac, iters; kwargs...)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters; kwargs...)
-    @info "Cached genetic func buiild tree with $iters iterations."
-    return cachedfuncgeneticbuildtree(surfac, p, n, pari)
+    @info "cachedgeneticbuildtree with $iters iterations."
+    return cachedgeneticbuildtree(surfac, p, n, pari)
 end
 
 function test(iterations, cubesize)
@@ -38,8 +38,8 @@ function test(iterations, cubesize)
     surface = [pl1, pl2, pl3, pl4, pl5, pl6]
 
     vs2, ns2 = sampleunitcube(cubesize)
-	
-	
+
+
     testwtr(vs2, ns2, surface, 2)
     return testwtr(vs2, ns2, surface, iterations)
 end
