@@ -1,8 +1,6 @@
 using StaticArrays
 using AbstractTrees
 using RANSAC
-using GeometryTypes
-using LinearAlgebra: normalize
 using D3Trees
 using Revise
 using CSGBuilding
@@ -28,8 +26,8 @@ edgel = (mincorner=-5, maxcorner=5, edgelength=150);
 
 # writeparaviewformat(wtr, "wtr", edgel)
 
-function testwtr(p, n, surfac, iters)
-    pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
+function testwtr(p, n, surfac, iters; kwargs...)
+    pari = CSGGeneticBuildParameters{Float64}(itermax=iters; kwargs...)
     @info "Cached genetic func buiild tree with $iters iterations."
     return cachedfuncgeneticbuildtree(surfac, p, n, pari)
 end
@@ -37,18 +35,13 @@ end
 vsw, nsw = readobj("wtr.obj", edgel);
 
 # test run
-alls, bestt = testwtr(vsw, nsw, surfs, 2);
+alls, bestt = testwtr(vsw, nsw, surfs, 2, maxdepth=5);
 
 # real run
-alls, bestt = testwtr(vsw, nsw, surfs, 3000);
+alls, bestt = testwtr(vsw, nsw, surfs, 1000, maxdepth=5);
 
 writeparaviewformat(besttr, "bestwtr", edgel)
 
-try
-    inchrome(D3Tree(alls[1]))
-catch e
-    showerror(stdout, e)
-    println("as expected")
-end
+tofile(D3Tree(alls[1]), "holedsphere.html")
 
 println("fully finished")

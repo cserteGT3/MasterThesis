@@ -2,6 +2,7 @@ using StaticArrays
 using AbstractTrees
 using CSGBuilding
 using RANSAC
+using D3Trees
 
 function sampleunitcube(ranges)
     # it's not a unit cube, but every coordinate is -1, 0 or 1
@@ -17,8 +18,8 @@ function sampleunitcube(ranges)
     return (vcat(v1,v2,v3,v4,v5,v6), vcat(n1,n2,n3,n4,n5,n6))
 end
 
-function testwtr(p, n, surfac, iters)
-    pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
+function testwtr(p, n, surfac, iters; kwargs...)
+    pari = CSGGeneticBuildParameters{Float64}(itermax=iters; kwargs...)
     @info "Cached genetic func buiild tree with $iters iterations."
     return cachedfuncgeneticbuildtree(surfac, p, n, pari)
 end
@@ -49,11 +50,6 @@ edgel = (mincorner=-7, maxcorner=7, edgelength=150);
 
 writeparaviewformat(bestt, "bestcube", edgel)
 
-try
-    inchrome(D3Tree(alls[1]))
-catch e
-    showerror(stdout, e)
-    println("as expected")
-end
+tofile(D3Tree(alls[1]), "csgcube.html")
 
 println("fully finished")

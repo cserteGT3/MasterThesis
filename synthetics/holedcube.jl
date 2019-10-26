@@ -1,6 +1,5 @@
 using StaticArrays
 using AbstractTrees
-using GeometryTypes
 using RANSAC
 using D3Trees
 using Revise
@@ -52,8 +51,8 @@ edgel = (mincorner=-2, maxcorner=2, edgelength=110);
 
 #writeparaviewformat(hcube, "hcube", edgel)
 
-function testwtr(p, n, surfac, iters)
-    pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
+function testwtr(p, n, surfac, iters; kwargs...)
+    pari = CSGGeneticBuildParameters{Float64}(itermax=iters; kwargs...)
     return cachedgeneticbuildtree(surfac, p, n, pari)
 end
 
@@ -67,11 +66,6 @@ alls, bestt = testwtr(vhc, nhc, surfs, 3000);
 # write to be able to check
 writeparaviewformat(bestt, "besthcube", edgel)
 
-try
-    inchrome(D3Tree(alls[1]))
-catch e
-    showerror(stdout, e)
-    println("as expected")
-end
+tofile(D3Tree(alls[1]), "holedcube.html")
 
 println("fully finished")
