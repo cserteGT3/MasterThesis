@@ -17,6 +17,12 @@ function sampleunitcube(ranges)
     return (vcat(v1,v2,v3,v4,v5,v6), vcat(n1,n2,n3,n4,n5,n6))
 end
 
+function testwtr(p, n, surfac, iters)
+    pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
+    @info "Cached genetic func buiild tree with $iters iterations."
+    return cachedfuncgeneticbuildtree(surfac, p, n, pari)
+end
+
 function test(iterations, cubesize)
     n1 = SVector(1,0,0.0);
     n2 = SVector(0,1,0.0);
@@ -28,9 +34,26 @@ function test(iterations, cubesize)
     pl4 = ImplicitPlane(-n1, -n1)
     pl5 = ImplicitPlane(-n2, -n2)
     pl6= ImplicitPlane(-n3, -n3)
-    surfac = [pl1, pl2, pl3, pl4, pl5, pl6]
+    surface = [pl1, pl2, pl3, pl4, pl5, pl6]
 
     vs2, ns2 = sampleunitcube(cubesize)
-    p = CSGGeneticBuildParameters{Float64}(itermax=iterations)
-    return cachedgeneticbuildtree(surfac, vs2, ns2, p)
+	
+	
+    testwtr(vs2, ns2, surface, 2)
+    return testwtr(vs2, ns2, surface, iterations)
 end
+
+alls, bestt = test(3000, 50);
+
+edgel = (mincorner=-7, maxcorner=7, edgelength=150);
+
+writeparaviewformat(bestt, "bestcube", edgel)
+
+try
+    inchrome(D3Tree(alls[1]))
+catch e
+    showerror(stdout, e)
+    println("as expected")
+end
+
+println("fully finished")
