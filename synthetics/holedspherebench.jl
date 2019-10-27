@@ -22,6 +22,8 @@ function makeit()
     return tr, [sp, pl, cyl]
 end
 
+@info "Number of threads: $(Base.Threads.nthreads())"
+
 wtr, surfs = makeit();
 edgel = (mincorner=-5, maxcorner=5, edgelength=150);
 
@@ -46,14 +48,14 @@ function testwtr3(p, n, surfac, iters)
 end
 
 vsw, nsw = readobj("wtr.obj", edgel);
-size(vsw)
+@info "Cloud size: $(size(vsw))"
 
 # test run
-alls, bestt = testwtr1(vsw, nsw, surfs, 2);
+#alls, bestt = testwtr1(vsw, nsw, surfs, 2);
 vsw, nsw = readobj("wtr.obj", edgel);
-alls, bestt = testwtr2(vsw, nsw, surfs, 50);
+alls, bestt = testwtr2(vsw, nsw, surfs, 20);
 vsw, nsw = readobj("wtr.obj", edgel);
-alls, bestt = testwtr3(vsw, nsw, surfs, 50);
+alls, bestt = testwtr3(vsw, nsw, surfs, 20);
 println("something useful")
 # real run
 #alls, bestt = testwtr(vsw, nsw, surfs, 3000);
