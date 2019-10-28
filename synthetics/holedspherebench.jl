@@ -3,6 +3,7 @@ using AbstractTrees
 using RANSAC
 using GeometryTypes
 using Logging
+using Random
 #using Revise
 using CSGBuilding
 const CSGB = CSGBuilding
@@ -32,18 +33,21 @@ edgel = (mincorner=-5, maxcorner=5, edgelength=110);
 function testwtr1(p, n, surfac, iters)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
     @info "Genetic build tree with $iters iterations."
+    Random.seed!(9876)
     return geneticbuildtree(surfac, p, n, pari)
 end
 
 function testwtr2(p, n, surfac, iters)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
     @info "Cached genetic build tree with $iters iterations."
+    Random.seed!(9876)
     return cachedgeneticbuildtree(surfac, p, n, pari)
 end
 
 function testwtr3(p, n, surfac, iters)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters)
     @info "Cached genetic func build tree with $iters iterations."
+    Random.seed!(9876)
     return cachedfuncgeneticbuildtree(surfac, p, n, pari)
 end
 
