@@ -1,3 +1,9 @@
+export JULIA_NUM_THREADS=16
+julia --project --color=yes holedspherebench.jl
+export JULIA_NUM_THREADS=8
+julia --project --color=yes holedspherebench.jl
+export JULIA_NUM_THREADS=4
+julia --project --color=yes holedspherebench.jl
 export JULIA_NUM_THREADS=2
 julia --project --color=yes holedspherebench.jl
 export JULIA_NUM_THREADS=1

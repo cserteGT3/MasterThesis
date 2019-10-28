@@ -25,7 +25,7 @@ end
 @info "Number of threads: $(Base.Threads.nthreads())"
 
 wtr, surfs = makeit();
-edgel = (mincorner=-5, maxcorner=5, edgelength=150);
+edgel = (mincorner=-5, maxcorner=5, edgelength=110);
 
 # writeparaviewformat(wtr, "wtr", edgel)
 
@@ -51,12 +51,10 @@ vsw, nsw = readobj("wtr.obj", edgel);
 @info "Cloud size: $(size(vsw))"
 
 # test run
-#alls, bestt = testwtr1(vsw, nsw, surfs, 2);
-vsw, nsw = readobj("wtr.obj", edgel);
+alls, bestt = testwtr1(vsw, nsw, surfs, 2);
 alls, bestt = testwtr2(vsw, nsw, surfs, 20);
-vsw, nsw = readobj("wtr.obj", edgel);
 alls, bestt = testwtr3(vsw, nsw, surfs, 20);
-println("something useful")
+println("This is the end")
 # real run
 #alls, bestt = testwtr(vsw, nsw, surfs, 3000);
 
