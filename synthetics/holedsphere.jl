@@ -10,7 +10,7 @@ using Logging
 cd(@__DIR__)
 
 function makeit()
-    sp = ImplicitSphere([0.0,0,0], 5)
+    sp = ImplicitSphere([0.0,0,0], 4.5)
     pl = ImplicitPlane([0.0,0,0], [0,1,0])
     cyl = ImplicitCylinder([0,0,1], [0,-2.5,0], 1.5)
 
@@ -23,7 +23,7 @@ function makeit()
 end
 
 wtr, surfs = makeit();
-edgel = (mincorner=-5, maxcorner=5, edgelength=150);
+edgel = (mincorner=-5, maxcorner=5, edgelength=110);
 
 # writeparaviewformat(wtr, "wtr", edgel)
 
@@ -34,6 +34,13 @@ function testwtr(p, n, surfac, iters; kwargs...)
 end
 
 vsw, nsw = readobj("wtr.obj", edgel);
+
+#=
+sc = plotimplshape(surfs[1])
+plotimplshape!(sc, surfs[2], color=(:red, 0.2), scale = (10., 10.))
+plotimplshape!(sc, surfs[3], color=(:green, 0.2), scale=10)
+scatter!(sc, vsw[1:8:end])
+=#
 
 #global_logger(RANSAC.nosource_debuglogger())
 # test run

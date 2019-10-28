@@ -1,6 +1,7 @@
 using StaticArrays
 using AbstractTrees
 using RANSAC
+using Logging
 using D3Trees
 using Revise
 using CSGBuilding
@@ -53,16 +54,17 @@ edgel = (mincorner=-2, maxcorner=2, edgelength=110);
 
 function testwtr(p, n, surfac, iters; kwargs...)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters; kwargs...)
-    return cachedgeneticbuildtree(surfac, p, n, pari)
+    return cachedfuncgeneticbuildtree(surfac, p, n, pari)
 end
 
 vhc, nhc = readobj("hcube.obj", edgel);
 
 # test run
-alls, bestt = testwtr(vhc, nhc, surfs, 10);
+alls, bestt = testwtr(vhc, nhc, surfs, 2);
 
+global_logger(RANSAC.nosource_debuglogger())
 # real run
-alls, bestt = testwtr(vhc, nhc, surfs, 3000);
+alls, bestt = testwtr(vhc, nhc, surfs, 1500);
 # write to be able to check
 writeparaviewformat(bestt, "besthcube", edgel)
 

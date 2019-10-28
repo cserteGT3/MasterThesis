@@ -59,7 +59,7 @@ scatter!(sc, smv[1:4:end], color=:blue)
 
 edgel = (mincorner=-2, maxcorner=2, edgelength=110);
 vhc, nhc = readobj("hcube.obj", edgel);
-schc = scatter(vhc[1:8:end])
+schc = scatter(vhc[1:4:end], markersize=0.1)
 plotimplshape!(schc, surfs[1], color= (:red, 0.2), scale=(2.,2.))
 plotimplshape!(schc, surfs[end-1], color= (:blue, 0.8), scale=(2.))
 plotimplshape!(schc, surfs[end], color= (:orange, 0.2), scale=(5.,5.))
