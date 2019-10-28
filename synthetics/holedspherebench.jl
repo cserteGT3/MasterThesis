@@ -54,15 +54,11 @@ end
 vsw, nsw = readobj("wtr.obj", edgel);
 @info "Cloud size: $(size(vsw))"
 
-# test run
+# benchmark run
 alls, bestt = testwtr1(vsw, nsw, surfs, 2);
 alls, bestt = testwtr2(vsw, nsw, surfs, 20);
 alls, bestt = testwtr3(vsw, nsw, surfs, 20);
 println("This is the end")
-# real run
-#alls, bestt = testwtr(vsw, nsw, surfs, 3000);
-
-#writeparaviewformat(bestt, "bestwtr", edgel)
 
 
 #=
