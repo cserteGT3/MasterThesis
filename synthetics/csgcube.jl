@@ -3,6 +3,7 @@ using AbstractTrees
 using CSGBuilding
 using RANSAC
 using D3Trees
+using Logging
 
 function sampleunitcube(ranges)
     # it's not a unit cube, but every coordinate is -1, 0 or 1
@@ -18,10 +19,12 @@ function sampleunitcube(ranges)
     return (vcat(v1,v2,v3,v4,v5,v6), vcat(n1,n2,n3,n4,n5,n6))
 end
 
+@info "$(Base.Threads.nthreads()) db thread"
+
 function testwtr(p, n, surfac, iters; kwargs...)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters; kwargs...)
-    @info "cachedgeneticbuildtree with $iters iterations."
-    return cachedgeneticbuildtree(surfac, p, n, pari)
+    @info "cachedfuncgeneticbuildtree with $iters iterations."
+    return cachedfuncgeneticbuildtree(surfac, p, n, pari)
 end
 
 function test(iterations, cubesize)

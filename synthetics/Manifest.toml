@@ -41,7 +41,7 @@ version = "0.5.7"
 
 [[CSGBuilding]]
 deps = ["AbstractTrees", "FileIO", "GeometryTypes", "LinearAlgebra", "Logging", "MeshIO", "Parameters", "Random", "StaticArrays"]
-git-tree-sha1 = "01c9146fda6ea23b1429579312921898ff58b0c3"
+git-tree-sha1 = "de30372b060b23ac6a4f0e53a0a831378f6dcf1c"
 repo-rev = "master"
 repo-url = "https://github.com/cserteGT3/CSGBuilding.jl"
 uuid = "a69a8ca4-c74f-409f-8e6c-efe80ff0e05d"
@@ -128,9 +128,9 @@ version = "1.1.0"
 
 [[DataStructures]]
 deps = ["InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "2103e504f427e54ffa19af9ada225733a21f951f"
+git-tree-sha1 = "6ffb2c3f04458e21abc5d7fdd8a1ffbe71e399d1"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.17.3"
+version = "0.17.4"
 
 [[Dates]]
 deps = ["Printf"]
