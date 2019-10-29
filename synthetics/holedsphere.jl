@@ -2,7 +2,7 @@ using StaticArrays
 using AbstractTrees
 using RANSAC
 using D3Trees
-using Revise
+#using Revise
 using CSGBuilding
 const CSGB = CSGBuilding
 using Logging
@@ -36,18 +36,29 @@ end
 vsw, nsw = readobj("wtr.obj", edgel);
 
 #=
+using FileIO
+using GeometryTypes
+using RANSACVisualizer
+using Makie
+
+m = load("wtr.obj");
+mv = vertices(m)
+
+mv2 = mv ./ (edgel.edgelength-1)
+mv2 = mv2.*(abs(edgel.mincorner)+abs(edgel.maxcorner))
+
 sc = plotimplshape(surfs[1])
 plotimplshape!(sc, surfs[2], color=(:red, 0.2), scale = (10., 10.))
 plotimplshape!(sc, surfs[3], color=(:green, 0.2), scale=10)
-scatter!(sc, vsw[1:8:end])
+scatter!(sc, mv2[1:2:end])
+scatter!(sc, vsw[1:2:end])
 =#
 
-#global_logger(RANSAC.nosource_debuglogger())
 # test run
-alls, bestt = testwtr(vsw, nsw, surfs, 2, maxdepth=5);
+alls, bestt = testwtr(vsw, nsw, surfs, 2, maxdepth=7);
 
 # real run
-alls, bestt = testwtr(vsw, nsw, surfs, 1100, maxdepth=5);
+alls, bestt = testwtr(vsw, nsw, surfs, 3000, maxdepth=7);
 
 writeparaviewformat(bestt, "bestwtr", edgel)
 
