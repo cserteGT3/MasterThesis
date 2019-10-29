@@ -62,7 +62,6 @@ vhc, nhc = readobj("hcube.obj", edgel);
 # test run
 alls, bestt = testwtr(vhc, nhc, surfs, 2);
 
-global_logger(RANSAC.nosource_debuglogger())
 # real run
 alls, bestt = testwtr(vhc, nhc, surfs, 3500);
 # write to be able to check
