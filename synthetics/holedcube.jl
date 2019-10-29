@@ -64,7 +64,7 @@ alls, bestt = testwtr(vhc, nhc, surfs, 2);
 
 global_logger(RANSAC.nosource_debuglogger())
 # real run
-alls, bestt = testwtr(vhc, nhc, surfs, 1500);
+alls, bestt = testwtr(vhc, nhc, surfs, 3500);
 # write to be able to check
 writeparaviewformat(bestt, "besthcube", edgel)
 

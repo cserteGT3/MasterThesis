@@ -51,8 +51,8 @@ alls, bestt = test(3000, 50);
 
 edgel = (mincorner=-7, maxcorner=7, edgelength=150);
 
-writeparaviewformat(bestt, "bestcube", edgel)
+writeparaviewformat(bestt, "bestcubenew", edgel)
 
-tofile(D3Tree(alls[1]), "csgcube.html")
+tofile(D3Tree(alls[1]), "csgcubenew.html")
 
 println("fully finished")
