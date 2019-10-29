@@ -29,8 +29,8 @@ edgel = (mincorner=-5, maxcorner=5, edgelength=110);
 
 function testwtr(p, n, surfac, iters; kwargs...)
     pari = CSGGeneticBuildParameters{Float64}(itermax=iters; kwargs...)
-    @info "cachedgeneticbuildtree with $iters iterations."
-    return cachedgeneticbuildtree(surfac, p, n, pari)
+    @info "cachedfuncgeneticbuildtree with $iters iterations."
+    return cachedfuncgeneticbuildtree(surfac, p, n, pari)
 end
 
 vsw, nsw = readobj("wtr.obj", edgel);

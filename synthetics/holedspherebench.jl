@@ -55,9 +55,9 @@ vsw, nsw = readobj("wtr.obj", edgel);
 @info "Cloud size: $(size(vsw))"
 
 # benchmark run
-alls, bestt = testwtr1(vsw, nsw, surfs, 2);
-alls, bestt = testwtr2(vsw, nsw, surfs, 20);
-alls, bestt = testwtr3(vsw, nsw, surfs, 20);
+#alls, bestt = testwtr1(vsw, nsw, surfs, 2);
+alls, bestt = testwtr2(vsw, nsw, surfs, 32);
+alls, bestt = testwtr3(vsw, nsw, surfs, 32);
 println("This is the end")
 
 
@@ -100,5 +100,152 @@ something useful
 
 C:\Users\cstamas\Documents\GIT\MasterThesis\synthetics>
 
+Emi compute
+
+[ Info: Number of threads: 16
+[ Info: Cloud size: (85180,)
+[ Info: Cached genetic build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 1150.43 seconds.
+[ Info: Cached genetic func build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 795.23 seconds.
+This is the end
+[ Info: Number of threads: 8
+[ Info: Cloud size: (85180,)
+[ Info: Cached genetic build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 1130.76 seconds.
+[ Info: Cached genetic func build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 579.42 seconds.
+This is the end
+[ Info: Number of threads: 4
+[ Info: Cloud size: (85180,)
+[ Info: Cached genetic build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 2047.51 seconds.
+[ Info: Cached genetic func build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 785.4 seconds.
+This is the end
+[ Info: Number of threads: 2
+[ Info: Cloud size: (85180,)
+[ Info: Cached genetic build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 2431.6 seconds.
+[ Info: Cached genetic func build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 280.57 seconds.
+This is the end
+[ Info: Number of threads: 1
+[ Info: Cloud size: (85180,)
+[ Info: Cached genetic build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 1810.24 seconds.
+[ Info: Cached genetic func build tree with 32 iterations.
+[ Info: Iteration in progress...
+[ Info: 3-th iteration
+[ Info: 6-th iteration
+[ Info: 9-th iteration
+[ Info: 12-th iteration
+[ Info: 15-th iteration
+[ Info: 18-th iteration
+[ Info: 21-th iteration
+[ Info: 24-th iteration
+[ Info: 27-th iteration
+[ Info: 30-th iteration
+[ Info: Finished: 32 iteration in 209.23 seconds.
+This is the end
 
 =#
