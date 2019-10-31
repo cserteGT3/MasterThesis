@@ -1,20 +1,20 @@
-using Pkg
-Pkg.activate()
-
 # every include
 using LinearAlgebra
 using StaticArrays
 using Random
-using Revise
 using Colors
 using Makie
 
+using Revise
 using RANSAC
+using RANSACVisualizer
 
 using DelimitedFiles
 
+cd(@__DIR__)
+
 pwdata = joinpath(pwd(),"data")
-fdarm = joinpath(pwdata, "darmstadt.dat")
+fdarm = joinpath(pwd(), "darmstadt.dat")
 fpulley = joinpath(pwdata, "pulley.dat")
 
 darm_dat = readdlm(fdarm, ' ', Float64, '\n', skipstart = 1 )
@@ -32,7 +32,8 @@ d_ns_ = [SVector(darm_dat[i,4], darm_dat[i,5], darm_dat[i,6]) for i in 1:size(da
 d_ns = normalize.(d_ns_)
 
 scatter(d_vs)
-showgeometry(d_vs, d_ns)
+sc = showgeometry(d_vs, d_ns)
+cam3d_cad!(sc)
 
 ## Pulley
 rndr = randperm(length(p_vs))
@@ -64,30 +65,45 @@ showshapes(pcr, extr)
 showbytype(pcr, extr)
 
 # Darmstadt
+Random.seed!(1234)
 rndr2 = randperm(length(d_vs))
 indi2 = rndr2[1:4:length(d_vs)]
 pcr2 = PointCloud(d_vs[indi2], d_ns[indi2], 20);
-pcr2 = PointCloud(d_vs, d_ns, 20);
 
 # plane
-p_ae = (ϵ = 0.3, α=deg2rad(20));
-# cylidner
-cy_ae = (ϵ = 0.3, α=deg2rad(20));
-# sphere
-sp_ae = (ϵ = 0.3, α=deg2rad(20));
-two_ae = AlphSilon(sp_ae, p_ae, cy_ae);
-# number of minimal subsets drawed in one iteration
-tt = 20;
-# probability that we found shapes
-ptt = 0.9
-# minimum shape size
-ττ = 500
-# maximum number of iteration
-itermax = 100000
-# size of the minimal set
-draws = 3
-cand, extr = ransac(pcr2, two_ae, tt, ptt, ττ, itermax, draws, 500, true)
-showtype(extr)
-showshapes(pcr2, extr)
+p = RANSACParameters{Float64}(ϵ_plane=0.4,
+                                α_plane=deg2rad(5),
+                                ϵ_sphere=0.3,
+                                α_sphere=deg2rad(2.5),
+                                ϵ_cylinder=0.3,
+                                α_cylinder=deg2rad(2.5),
+                                minsubsetN=15,
+                                itermax=100_000);
 
-showbytype(pcr2, extr)
+cand, extr = ransac(pcr2, p, true, reset_rand=true);
+showtype(extr)
+showshapes!(sc, pcr2, [cand[6]]; markersize=1)
+
+
+## by type
+sc = showbytype(pcr2, extr; markersize=0.5)
+scatter!(sc, pcr2.vertices[getrest(pcr2)], markersize=0.5)
+cam3d_cad!(sc)
+
+sc2 = showgeometry(d_vs, d_ns);
+sc3 = hbox(sc, sc2)
+
+
+## different
+sc = showshapes(pcr2, extr; markersize=0.3)
+scatter!(sc, pcr2.vertices[getrest(pcr2)], markersize=0.3)
+cam3d_cad!(sc)
+
+sc2 = showgeometry(d_vs, d_ns);
+sc3 = hbox(sc, sc2)
+
+
+using ColorSchemes
+
+colsss = ColorSchemes.gnuplot
+get(colsss, 0.5)
