@@ -1,10 +1,11 @@
-using Revise
 using LinearAlgebra
 using StaticArrays
 using Makie
-AbstractPlotting.__init__()
+using Random
 
+using Revise
 using RANSAC
+using RANSACVisualizer
 
 ## Easy examples
 
@@ -234,42 +235,20 @@ largestconncomp(overSbm, overSid)
 largestconncomp(underSbm, underSid)
 
 
-## RANSAC
-using Pkg
-Pkg.activate()
+## cone
 
-# every include
-using LinearAlgebra
-using StaticArrays
-using Random
-using Revise
-using Colors
-using Makie
+n1 = SVector(1.,0,0);
+n2 = SVector(0,1,0.0);
+n3 = SVector(0,0,1.0);
 
-includet("RANSAC.jl")
-using .RANSAC
+Random.seed!(1234)
+p1 = SVector{3}(rand(3))
+p2 = SVector{3}(rand(3))
+p3 = SVector{3}(rand(3))
 
-# inputs
-vs, ns, norms4Plot, shape_s = examplepc2();
-# (normalize surface normals if needed)
-pcr = PointCloud(vs, ns, 8);
-αα = deg2rad(10);
-ϵϵ = 0.5;
-# number of minimal subsets drawed in one iteration
-tt = 30;
-# probability that we found shapes
-ptt = 0.9
-# minimum shape size
-ττ = 1000
-# maximum number of iteration
-itermax = 10000
-# size of the minimal set
-draws = 3
-cand, extr = ransac(pcr, αα, ϵϵ, tt, ptt, ττ, itermax, draws, true)
+p = [p1, p2, p3]
+n = [n1, n2, n3]
 
-using Makie
-
-sc = showshapes(pcr, extr)
-sco = scatter(vs)
-m = vbox(sco, sc)
-# Makie.save("plot.png", m)
+m1 = hcat([n1, n2, n3]...)
+dvs = [-1*dot(p[i], n[i]) for i in 1:3]
+m2 = hcat(m1, dvs)
