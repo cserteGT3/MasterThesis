@@ -11,7 +11,8 @@ using SignedDistanceFields
 include("raymarching.jl")
 include("camera.jl");
 
-export  IsometricCamera,
+export  AbstractCamera,
+        IsometricCamera,
         PinholeCamera,
         RayResults,
         raymarch,

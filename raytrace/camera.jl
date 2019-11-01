@@ -1,4 +1,6 @@
-struct IsometricCamera
+abstract type AbstractCamera end
+
+struct IsometricCamera <: AbstractCamera
   Position::space
   Direction::space
   Sensorx::space
@@ -14,7 +16,7 @@ function los(Cam::IsometricCamera,X::Int64,Y::Int64)::Tuple{space,space}
   ((X-Cam.Maxx)*Cam.Sensorx+(Y-Cam.Maxy)*Cam.Sensory+Cam.Position,Cam.Direction)
 end
 
-struct PinholeCamera
+struct PinholeCamera <: AbstractCamera
   Position::space
   Direction::space
   Sensorx::space
