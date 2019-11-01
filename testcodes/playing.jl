@@ -252,3 +252,15 @@ n = [n1, n2, n3]
 m1 = hcat([n1, n2, n3]...)
 dvs = [-1*dot(p[i], n[i]) for i in 1:3]
 m2 = hcat(m1, dvs)
+
+# test cone
+
+apex = SVector(0.,0,0)
+axis = SVector(0,0,-1.)
+opang = deg2rad(20)
+h = 10.
+sizet = (4,4)
+
+cps = samplecone(apex, axis, opang, h, sizet)
+
+scatter(cps)
