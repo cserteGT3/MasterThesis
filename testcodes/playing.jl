@@ -1,6 +1,7 @@
 using LinearAlgebra
 using StaticArrays
 using Makie
+using GeometryTypes
 using Random
 
 using Revise
@@ -255,20 +256,29 @@ m2 = hcat(m1, dvs)
 
 # test cone
 
-apex = SVector(0.,0,0)
+apex = SVector(0,0,0)
+apex = SVector(15,-7, 0.5)
 axis = SVector(0,0,-1.)
 opang = deg2rad(20)
 h = 10.
-sizet = (20,20)
+sizet = (10,10)
 
 cps, cns = samplecone(apex, axis, opang, h, sizet)
 
 showgeometry(cps, cns)
 
+rrr = [25, 19, 97]
+rrr2 = [25, 97, 19]
+hicone = RANSAC.fit3pointcone(cps[rrr], cns[rrr])
+hicone2 = RANSAC.fit3pointcone(cps[rrr2], cns[rrr2])
+
+sc = scatter(cps)
+scatter!(sc, p3, color=:red, markersize=0.5)
+scatter!(sc, [x1], color=:blue, markersize=0.5)
+scatter!(sc, cps[rrr], color=:green, markersize=0.5)
+showgeometry!(sc, cps[rrr], cns[rrr])
+
 p = RANSACParameters{Float64}()
 
-showgeometry(cps, cns)
-
-rrr = [25, 157, 19]
-showgeometry(cps[rrr], cns[rrr])
-hicone = RANSAC.fit3pointcone(cps[rrr], cns[rrr], p)
+hcone = RANSAC.fitcone(cps[rrr], cns[rrr], p)
+hcone2 = RANSAC.fitcone(cps[rrr2], cns[rrr2], p)
