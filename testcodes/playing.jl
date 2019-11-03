@@ -259,8 +259,16 @@ apex = SVector(0.,0,0)
 axis = SVector(0,0,-1.)
 opang = deg2rad(20)
 h = 10.
-sizet = (4,4)
+sizet = (20,20)
 
-cps = samplecone(apex, axis, opang, h, sizet)
+cps, cns = samplecone(apex, axis, opang, h, sizet)
 
-scatter(cps)
+showgeometry(cps, cns)
+
+p = RANSACParameters{Float64}()
+
+showgeometry(cps, cns)
+
+rrr = [25, 157, 19]
+showgeometry(cps[rrr], cns[rrr])
+hicone = RANSAC.fit3pointcone(cps[rrr], cns[rrr], p)
