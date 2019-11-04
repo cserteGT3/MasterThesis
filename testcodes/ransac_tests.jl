@@ -68,3 +68,30 @@ Makie.save("plot.png", m)
 
 
 estimatescore(1100, 16000, 1100)
+
+
+## examplepc6
+# inputs
+vs, ns, norms4Plot, shape_s = examplepc6();
+sc = showgeometry(vs, ns)
+pcr = PointCloud(vs, ns, 32);
+#RANSAC parameters
+p = RANSACParameters{Float64}(itermax=5)
+cand, extr = ransac(pcr, p, true)
+#leftover = getrest(pcr);
+showtype(extr)
+sc = showshapes(pcr, extr)
+
+showbytype(pcr, extr)
+
+m2 = vbox(sc, sc2)
+
+sco = scatter(vs)
+scon = showgeometry(vs, ns)
+m = vbox(scon, sc)
+# Makie.save("plot.png", m)
+
+scatter(pcr.vertices[leftover])
+linesegments!(norms4Plot[leftover], color = :blue)
+
+showgeometry(vs, ns)

@@ -258,14 +258,16 @@ m2 = hcat(m1, dvs)
 
 apex = SVector(0,0,0)
 apex = SVector(15,-7, 0.5)
-axis = SVector(0,0,-1.)
+axis = SVector(0,0,1.)
 opang = deg2rad(20)
 h = 10.
 sizet = (10,10)
 
 cps, cns = samplecone(apex, axis, opang, h, sizet)
-
 showgeometry(cps, cns)
+
+ex6v, ex6n, _, sh_s = examplepc6()
+showgeometry(ex6v ,ex6n)
 
 rrr = [25, 19, 97]
 rrr2 = [25, 97, 19]
@@ -274,7 +276,6 @@ hicone2 = RANSAC.fit3pointcone(cps[rrr2], cns[rrr2])
 
 sc = scatter(cps)
 scatter!(sc, p3, color=:red, markersize=0.5)
-scatter!(sc, [x1], color=:blue, markersize=0.5)
 scatter!(sc, cps[rrr], color=:green, markersize=0.5)
 showgeometry!(sc, cps[rrr], cns[rrr])
 
