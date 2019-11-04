@@ -69,6 +69,10 @@ Random.seed!(1234)
 rndr2 = randperm(length(d_vs))
 indi2 = rndr2[1:4:length(d_vs)]
 pcr2 = PointCloud(d_vs[indi2], d_ns[indi2], 20);
+pcr2 = PointCloud(d_vs, d_ns, 32);
+
+using Logging
+global_logger(nosource_IterInflog())
 
 # plane
 p = RANSACParameters{Float64}(ϵ_plane=0.4,
@@ -77,11 +81,15 @@ p = RANSACParameters{Float64}(ϵ_plane=0.4,
                                 α_sphere=deg2rad(2.5),
                                 ϵ_cylinder=0.3,
                                 α_cylinder=deg2rad(2.5),
+                                ϵ_cone=0.15,
+                                α_cone=deg2rad(1),
                                 minsubsetN=15,
                                 itermax=100_000);
 
 cand, extr = ransac(pcr2, p, true, reset_rand=true);
 showtype(extr)
+showbytype(pcr2, extr, markersize=0.5)
+showshapes(pcr2, extr, markersize=0.5)
 showshapes!(sc, pcr2, [cand[6]]; markersize=1)
 
 
