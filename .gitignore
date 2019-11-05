@@ -7,6 +7,9 @@
 *.mhd
 *.raw
 
+## Cache file
+thesis-cache.yaml
+
 ## Latex
 ## source: https://github.com/github/gitignore/blob/master/TeX.gitignore
 
