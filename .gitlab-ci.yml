@@ -8,7 +8,8 @@ pdf:
     #- tectonic --keep-intermediates --reruns 0 thesis.tex
     #- biber thesis
     - tectonic thesis.tex
+    - cd ..
     - mv thesis/thesis.pdf cstamas_thesis.pdf
   artifacts:
     paths:
-      - thesis/thesis.pdf
+      - cstamas_thesis.pdf
