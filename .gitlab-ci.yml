@@ -2,7 +2,7 @@ pdf:
   image: dxjoke/tectonic-docker
   script:
     - tectonic --keep-intermediates --reruns 0 thesis/thesis.tex
-    - biber thesis/main
+    - biber thesis/thesis
     - tectonic thesis/thesis.tex
   artifacts:
     paths:
