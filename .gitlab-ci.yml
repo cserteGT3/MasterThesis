@@ -1,9 +1,11 @@
+# We use the docker image from https://hub.docker.com/r/dxjoke/tectonic-docker/
 pdf:
   image: dxjoke/tectonic-docker
   script:
-    - tectonic --keep-intermediates --reruns 0 thesis/thesis.tex
-    - biber thesis/thesis
-    - tectonic thesis/thesis.tex
+    - cd thesis/
+    - tectonic --keep-intermediates --reruns 0 thesis.tex
+    - biber thesis
+    - tectonic thesis.tex
   artifacts:
     paths:
       - thesis/thesis.pdf
