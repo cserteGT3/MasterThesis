@@ -1,4 +1,6 @@
 # We use the docker image from https://hub.docker.com/r/dxjoke/tectonic-docker/
+# link to the latest build:
+# https://gitlab.com/csertegt3/masterthesisbuild/-/jobs/artifacts/master/raw/cstamas_thesis.pdf?job=pdf
 pdf:
   image: dxjoke/tectonic-docker
   script:
@@ -6,6 +8,7 @@ pdf:
     #- tectonic --keep-intermediates --reruns 0 thesis.tex
     #- biber thesis
     - tectonic thesis.tex
+    - mv thesis/thesis.pdf cstamas_thesis.pdf
   artifacts:
     paths:
       - thesis/thesis.pdf
